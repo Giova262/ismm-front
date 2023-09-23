@@ -75,7 +75,7 @@
           <div class="text-center text-grey-9 text-weight-bolder">
             <img src="~assets/logo.jpeg" style="width: 240px" />
             <div class="jg-text-18 text-bold q-mt-md">
-              Santuario Mundial de los Milagros
+              Santuario Mundial de los Milagros 2
             </div>
           </div>
         </div>
@@ -83,7 +83,7 @@
         <div class="div-1 q-mb-sm q-mb-lg jg-border-radius-2 q-mt-sm">
           <q-input
             v-model="form.name"
-            label="Usuario"
+            label="Usuario 2"
             type="text"
             dark
             autocomplete="new-password"
@@ -94,7 +94,7 @@
           <q-input
             v-model="form.password"
             :type="isPwd ? 'password' : 'text'"
-            label="Contraseña"
+            label="Contraseña 2"
             dark
             autocomplete="new-password"
             :hide-bottom-space="true"
