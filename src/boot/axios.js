@@ -11,7 +11,7 @@ const api = axios.create({ baseURL: "https://api.example.com" });
 // axios.defaults.baseURL = 'https://arcane-forest-80794.herokuapp.com/api';
 // axios.defaults.baseURL = 'http://192.168.50.6:8000/api';
 // axios.defaults.baseURL = 'http://127.0.0.1:8000/api';
-axios.defaults.baseURL = 'https://ismm-api.duckdns.org/api';
+axios.defaults.baseURL = 'https://ismm-backend.duckdns.org/api';
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
