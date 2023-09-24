@@ -8,7 +8,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
-      <q-toolbar class="row bg-blue-10">
+      <q-toolbar class="row bg-green-10">
         <div class="col-2 text-white">
           <q-btn
             flat
@@ -32,31 +32,53 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
+    <q-drawer v-model="leftDrawerOpen" show-if-above class="bg-grey-9 text-grey-2">
       <q-list>
-        <q-item-label header> MENU </q-item-label>
+        <q-item-label header class="text-grey-2 q-ml-sm"> MENU </q-item-label>
+
+        <q-separator class="q-mx-xs bg-grey-6 q-mb-md"></q-separator>
+
 
         <q-item clickable tag="a" :to="'/persona/crear'">
           <q-item-section avatar>
-            <q-icon :name="'person_add'" :style="{ color: '#26a69a' }" />
+            <q-icon :name="'person_add'" :style="{ color: '#a5d6a7' }" />
           </q-item-section>
 
           <q-item-section>
             <q-item-label>Agregar</q-item-label>
-            <q-item-label caption>Registra una persona</q-item-label>
+            <!-- <q-item-label caption>Registra una persona</q-item-label> -->
           </q-item-section>
         </q-item>
+
+        <q-separator class="bg-grey-7 q-mx-xl " />
+
 
         <q-item clickable tag="a" :to="'/personas/show'">
           <q-item-section avatar>
-            <q-icon :name="'search'" :style="{ color: '#121212' }" />
+            <q-icon :name="'search'" :style="{ color: '#eeeee' }" />
           </q-item-section>
 
           <q-item-section>
-            <q-item-label>Ver</q-item-label>
-            <q-item-label caption>Muestra todos los ingresados</q-item-label>
+            <q-item-label>Ver Miembros</q-item-label>
+            <!-- <q-item-label caption>Muestra todos los ingresados</q-item-label> -->
           </q-item-section>
         </q-item>
+
+        <q-separator class="bg-grey-7 q-mx-xl " />
+
+
+        <q-item clickable tag="a" :to="'/personas/show/revision'">
+          <q-item-section avatar>
+            <q-icon :name="'person_search'" :style="{ color: '#ce93d8' }" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Ver en Revision</q-item-label>
+            <!-- <q-item-label caption>Muestra todos los ingresados</q-item-label> -->
+          </q-item-section>
+        </q-item>
+
+        <q-separator class="bg-grey-7 q-mx-xl " />
 
         <q-item
           clickable
@@ -65,14 +87,16 @@
           :href="'https://www.facebook.com/profile.php?id=100069881769785'"
         >
           <q-item-section avatar>
-            <q-icon :name="'public'" :style="{ color: '#1976d2' }" />
+            <q-icon :name="'public'" :style="{ color: '#90caf9' }" />
           </q-item-section>
 
           <q-item-section>
             <q-item-label>Facebook</q-item-label>
-            <q-item-label caption>Santuario Mundial Fb</q-item-label>
+            <!-- <q-item-label caption>Santuario Mundial Fb</q-item-label> -->
           </q-item-section>
         </q-item>
+
+        <q-separator class="bg-grey-7 q-mx-xl " />
 
         <q-item
           clickable
@@ -81,16 +105,16 @@
           :href="'https://online.bibliadeestudio.org'"
         >
           <q-item-section avatar>
-            <q-icon :name="'favorite'" :style="{ color: '#c10015' }" />
+            <q-icon :name="'favorite'" :style="{ color: '#ef9a9a' }" />
           </q-item-section>
 
           <q-item-section>
-            <q-item-label>Biblia</q-item-label>
-            <q-item-label caption>Biblia Online</q-item-label>
+            <q-item-label>Ver Biblia</q-item-label>
+            <!-- <q-item-label caption>Biblia Online</q-item-label> -->
           </q-item-section>
         </q-item>
 
-        <q-separator class="bg-grey-7 q-mx-md q-mt-md" />
+        <q-separator class="bg-grey-7 q-mx-md q-my-md" />
 
         <q-item clickable flat @click.native="desloguear" class="">
           <q-item-section avatar>
