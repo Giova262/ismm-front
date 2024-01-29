@@ -3,28 +3,7 @@
 <template>
   <div class="">
     <div v-if="isReady" class="row q-gutter-y-sm bg-white q-pa-xs">
-      <div class="col-12 q-mb-sm">
-        <span class="q-mr-sm">Datos de la persona</span>
-        <q-icon
-          v-if="verMas"
-          name="add"
-          rounded
-          size="xs"
-          class="bg-green-3"
-          @click="verMas = false"
-        />
-        <q-icon
-          v-else
-          rounded
-          name="add"
-          size="xs"
-          class=""
-          @click="verMas = true"
-        />
-      </div>
-
-      <!-- Foto -->
-      <div class="col-12 text-center">
+      <div class="col-12 text-center q-pa-none q-mt-sm">
         <q-img
           alt="Foto"
           :src="getURLImagen"
@@ -38,12 +17,12 @@
         />
 
         <div class="col-12 text-center q-py-sm q-ma-none">
-          <q-btn
+          <!-- <q-btn
             @click="onSeleccionarArchivoClick()"
             dense
             class="q-px-sm no-caps text-center"
             :label="`Seleccionar foto / Tomar foto`"
-          ></q-btn>
+          ></q-btn> -->
 
           <q-file
             :ref="ImagenDataRef"
@@ -54,10 +33,8 @@
           </q-file>
         </div>
       </div>
-      <!-- Foto -->
 
       <q-input
-        filled
         dense
         clearable
         :disable="modoVista"
@@ -66,12 +43,10 @@
         class="col-sm-6 col-12 q-pr-sm"
         type="text"
         maxlength="200"
-        hint="Ej: Fulanito"
         hide-bottom-space
       />
 
       <q-input
-        filled
         dense
         clearable
         :disable="modoVista"
@@ -80,12 +55,10 @@
         class="col-sm-6 col-12 q-pr-sm"
         type="text"
         maxlength="200"
-        hint="Ej: Perez"
         hide-bottom-space
       />
 
       <q-input
-        filled
         dense
         clearable
         :disable="modoVista"
@@ -93,21 +66,253 @@
         label="Telefono*"
         class="col-sm-6 col-12 q-pr-sm"
         type="text"
-        maxlength="200"
-        hint="Ej: +541126251235"
+        mask="+## # ## #### ####"
+        placeholder="Ej: +54 9 11 1234 5678"
+        hint="Ejemplo: +54 9 11 1234 5678"
         hide-bottom-space
       />
 
       <q-select
+        v-model="persona.estado"
+        label="Estado"
+        virtual-scroll-slice-size="60"
+        use-chips
+        dense
+        class="col-sm-6 col-12 q-pr-sm"
+        options-selected-class="text-grey"
+        :options="opcionesEstados"
+        hide-bottom-space
+      >
+        <template v-slot:selected-item="scope">
+          <span text-color="grey-8" class="q-ma-none q-py-sm">
+            {{ scope.opt.descripcion }}
+          </span>
+        </template>
+
+        <template v-slot:option="scope">
+          <q-item v-bind="scope.itemProps">
+            <q-item-section>
+              <q-item-label>{{ scope.opt.descripcion }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </template>
+      </q-select>
+
+      <q-input
+        dense
+        clearable
+        :disable="modoVista"
+        v-model="persona.comentario"
+        autogrow
+        label="Comentario"
+        class="col-sm-6 col-12 q-pr-sm q-pb-sm"
+        type="text"
+        maxlength="200"
+        placeholder="Se mudo, le queda lejos, etc"
+        hide-bottom-space
+      />
+
+      <q-btn-toggle
+        v-model="persona.bautizado"
+        spread
+        dense
+        no-caps
+        class="col-12"
+        toggle-color="green-8"
+        color="white"
+        text-color="black"
+        :options="[
+          { label: 'No esta Bautizado', value: false },
+          { label: 'Si esta Bautizado', value: true },
+        ]"
+      />
+
+      <q-btn
+        v-if="verMas"
+        flat
+        class="q-pr-md q-mt-md q-mb-none text-red-4"
+        @click="verMas = false"
+        dense
+        label="Ocultar datos opcionales"
+      />
+
+      <q-input
+        v-if="verMas"
+        dense
+        clearable
+        :disable="modoVista"
+        v-model="persona.direccion"
+        label="Direccion"
+        class="col-sm-6 col-12 q-pr-sm"
+        type="text"
+        filled
+        hide-bottom-space
+      />
+
+      <q-input
+        v-if="verMas"
+        dense
+        clearable
+        :disable="modoVista"
+        v-model="persona.barrio"
+        label="Barrio"
+        class="col-sm-6 col-12 q-pr-sm"
+        type="text"
+        filled
+        hide-bottom-space
+      />
+
+      <q-input
+        v-if="verMas"
+        dense
+        clearable
+        :disable="modoVista"
+        v-model="persona.email"
+        label="Correo"
+        class="col-sm-6 col-12 q-pr-sm"
+        type="text"
+        filled
+        maxlength="200"
+        hide-bottom-space
+      />
+
+      <q-input
+        v-if="verMas"
+        dense
+        clearable
+        :disable="modoVista"
+        v-model="persona.iglesia"
+        label="Iglesia"
+        filled
+        class="col-sm-6 col-12 q-pr-sm"
+        type="text"
+        maxlength="200"
+        hide-bottom-space
+      />
+
+      <q-input
+        v-if="verMas"
+        dense
+        filled
+        clearable
+        :disable="modoVista"
+        v-model="persona.edad"
+        label="Edad"
+        class="col-sm-6 col-12 q-pr-sm"
+        type="number"
+        hide-bottom-space
+      />
+
+      <q-input
+        v-if="verMas"
+        label="Fecha de Nacimiento"
+        dense
+        filled
+        v-model="persona.fecha_nacimiento"
+        class="col-sm-6 col-12 q-pr-sm"
+      >
+        <template v-slot:prepend>
+          <q-icon name="event" class="cursor-pointer">
+            <q-popup-proxy
+              cover
+              transition-show="scale"
+              transition-hide="scale"
+            >
+              <q-date
+                v-model="persona.fecha_nacimiento"
+                mask="YYYY-MM-DD HH:mm"
+                default-view="Years"
+              >
+                <div class="row items-center justify-end">
+                  <q-btn v-close-popup label="Close" color="primary" flat />
+                </div>
+              </q-date>
+            </q-popup-proxy>
+          </q-icon>
+        </template>
+        <!--
+        <template v-slot:append>
+          <q-icon name="access_time" class="cursor-pointer">
+            <q-popup-proxy
+              cover
+              transition-show="scale"
+              transition-hide="scale"
+            >
+              <q-time
+                v-model="persona.fecha_nacimiento"
+                mask="YYYY-MM-DD HH:mm"
+                default-view="Years"
+              >
+                <div class="row items-center justify-end">
+                  <q-btn v-close-popup label="Close" color="primary" flat />
+                </div>
+              </q-time>
+            </q-popup-proxy>
+          </q-icon>
+        </template> -->
+      </q-input>
+
+      <q-input
+        v-if="verMas"
+        label="Fecha de Ingreso"
+        dense
+        filled
+        v-model="persona.fecha_ingreso"
+        class="col-sm-6 col-12 q-pr-sm"
+      >
+        <template v-slot:prepend>
+          <q-icon name="event" class="cursor-pointer">
+            <q-popup-proxy
+              cover
+              transition-show="scale"
+              transition-hide="scale"
+              ref="qDateProxy1"
+            >
+              <q-date
+                v-model="persona.fecha_ingreso"
+                default-view="Years"
+                emit-immediately
+                mask="YYYY-MM-DD HH:mm"
+                @update:model-value="onClickAnio"
+              >
+                <div class="row items-center justify-end">
+                  <q-btn v-close-popup label="Close" color="primary" flat />
+                </div>
+              </q-date>
+            </q-popup-proxy>
+          </q-icon>
+        </template>
+
+        <!-- <template v-slot:append>
+          <q-icon name="access_time" class="cursor-pointer">
+            <q-popup-proxy
+              cover
+              transition-show="scale"
+              transition-hide="scale"
+            >
+              <q-time
+                v-model="persona.fecha_ingreso"
+                mask="YYYY-MM-DD HH:mm"
+                format24h
+              >
+                <div class="row items-center justify-end">
+                  <q-btn v-close-popup label="Close" color="primary" flat />
+                </div>
+              </q-time>
+            </q-popup-proxy>
+          </q-icon>
+        </template> -->
+      </q-input>
+
+      <q-select
+        v-if="verMas"
         v-model="persona.sexo"
-        label="Sexo*"
         virtual-scroll-slice-size="60"
         use-chips
         filled
         dense
-        hint="Ej: Mujer"
         clearable
-        class="col-sm-6 col-12 q-pr-sm"
+        class="col-sm-6 col-12 q-pr-sm q-mb-xs"
         options-selected-class="text-grey"
         :options="[
           { descripcion: 'Hombre', codigo: 'M' },
@@ -138,188 +343,28 @@
         </template>
       </q-select>
 
-      <div v-if="verMas" class="col-12 q-mt-lg">
-        <span class="q-mr-sm">Datos adicioneles opcionales</span>
-      </div>
-
       <q-input
         v-if="verMas"
-        dense
-        clearable
-        :disable="modoVista"
-        v-model="persona.direccion"
-        label="Direccion"
-        class="col-sm-6 col-12 q-pr-sm"
-        type="text"
-        hint="Ej: Calle falsa 123"
-        hide-bottom-space
-      />
-
-      <q-input
-        v-if="verMas"
-        dense
-        clearable
-        :disable="modoVista"
-        v-model="persona.email"
-        label="Correo electronico / Email"
-        class="col-sm-6 col-12 q-pr-sm"
-        type="text"
-        maxlength="200"
-        hint="Ej: prz@gmail.com"
-        hide-bottom-space
-      />
-
-      <q-input
-        v-if="verMas"
-        dense
-        clearable
-        :disable="modoVista"
-        v-model="persona.iglesia"
-        label="Iglesia Cede"
-        class="col-sm-6 col-12 q-pr-sm"
-        type="text"
-        maxlength="200"
-        hint="Ej: Madero"
-        hide-bottom-space
-      />
-
-      <q-input
-        v-if="verMas"
-        dense
-        clearable
-        :disable="modoVista"
-        v-model="persona.comentario"
-        label="Comentario"
-        autogrow
-        class="col-sm-6 col-12 q-pr-sm"
-        type="text"
-        maxlength="200"
-        hint="Ej: Tiene pelo rojo"
-        hide-bottom-space
-      />
-
-      <q-input
-        v-if="verMas"
-        dense
+        filled
         clearable
         :disable="modoVista"
         v-model="persona.testimonio"
         label="Testimonio"
         autogrow
-        class="col-sm-6 col-12 q-pr-sm"
+        class="col-sm-6 col-12 q-pr-sm q-mt-md"
         type="text"
         maxlength="200"
-        hint="Ej: Supero la depresion"
         hide-bottom-space
       />
 
-      <q-input
-        v-if="verMas"
+      <q-btn
+        v-if="!verMas"
+        flat
+        class="q-pr-md q-mt-md q-mb-none text-green-4"
+        @click="verMas = true"
         dense
-        clearable
-        :disable="modoVista"
-        v-model="persona.edad"
-        label="Edad"
-        class="col-sm-6 col-12 q-pr-sm"
-        type="number"
-        hint="Ej: 45"
-        hide-bottom-space
+        label="Mostrar datos opcionales"
       />
-
-      <q-input
-        v-if="verMas"
-        label="Fecha de Nacimiento"
-        dense
-        clearable
-        hint="Ej: 26-02-1800"
-        v-model="persona.fecha_nacimiento"
-        class="col-sm-6 col-12 q-pr-sm"
-      >
-        <template v-slot:prepend>
-          <q-icon name="event" class="cursor-pointer">
-            <q-popup-proxy
-              cover
-              transition-show="scale"
-              transition-hide="scale"
-            >
-              <q-date
-                v-model="persona.fecha_nacimiento"
-                mask="YYYY-MM-DD HH:mm"
-              >
-                <div class="row items-center justify-end">
-                  <q-btn v-close-popup label="Close" color="primary" flat />
-                </div>
-              </q-date>
-            </q-popup-proxy>
-          </q-icon>
-        </template>
-
-        <template v-slot:append>
-          <q-icon name="access_time" class="cursor-pointer">
-            <q-popup-proxy
-              cover
-              transition-show="scale"
-              transition-hide="scale"
-            >
-              <q-time
-                v-model="persona.fecha_nacimiento"
-                mask="YYYY-MM-DD HH:mm"
-                format24h
-              >
-                <div class="row items-center justify-end">
-                  <q-btn v-close-popup label="Close" color="primary" flat />
-                </div>
-              </q-time>
-            </q-popup-proxy>
-          </q-icon>
-        </template>
-      </q-input>
-
-      <q-input
-        v-if="verMas"
-        label="Fecha de Ingreso"
-        dense
-        clearable
-        hint="Ej: 06-02-1830"
-        v-model="persona.fecha_ingreso"
-        class="col-sm-6 col-12 q-pr-sm"
-      >
-        <template v-slot:prepend>
-          <q-icon name="event" class="cursor-pointer">
-            <q-popup-proxy
-              cover
-              transition-show="scale"
-              transition-hide="scale"
-            >
-              <q-date v-model="persona.fecha_ingreso" mask="YYYY-MM-DD HH:mm">
-                <div class="row items-center justify-end">
-                  <q-btn v-close-popup label="Close" color="primary" flat />
-                </div>
-              </q-date>
-            </q-popup-proxy>
-          </q-icon>
-        </template>
-
-        <template v-slot:append>
-          <q-icon name="access_time" class="cursor-pointer">
-            <q-popup-proxy
-              cover
-              transition-show="scale"
-              transition-hide="scale"
-            >
-              <q-time
-                v-model="persona.fecha_ingreso"
-                mask="YYYY-MM-DD HH:mm"
-                format24h
-              >
-                <div class="row items-center justify-end">
-                  <q-btn v-close-popup label="Close" color="primary" flat />
-                </div>
-              </q-time>
-            </q-popup-proxy>
-          </q-icon>
-        </template>
-      </q-input>
     </div>
   </div>
 </template>
@@ -328,6 +373,7 @@
 import { useQuasar } from "quasar";
 import { defineComponent, ref, onMounted, computed } from "vue";
 import Persona from "src/Models/Persona";
+import EstadosDB from "src/db/EstadosDB";
 import CustomSelect from "src/components/CustomComponents/Custom.select.vue";
 
 export default defineComponent({
@@ -345,16 +391,23 @@ export default defineComponent({
       required: false,
       default: false,
     },
+    estaEditando: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
-  setup({ persona }) {
+  setup({ persona, estaEditando }) {
     const $q = useQuasar();
     const isReady = ref(false);
     const verMas = ref(false);
     const ImagenRef = ref();
+    const qDateProxy1 = ref(null);
     const ImagenDataRef = ref();
+    const opcionesEstados = ref([]);
 
     const getURLImagen = computed(() => {
-      if (!persona.foto_data) return null;
+      if (!persona.foto_data) return persona.foto_url;
       const url = window.URL.createObjectURL(persona.foto_data);
       persona.foto_url = url;
       return url;
@@ -389,16 +442,33 @@ export default defineComponent({
       fileInputRef[0].click();
     }
 
+    async function cargarEstados() {
+      opcionesEstados.value = await EstadosDB.getAll();
+    }
+
+    function onClickAnio() {
+      qDateProxy1.value.hide();
+    }
+
     onMounted(async () => {
+      await cargarEstados();
+      if (estaEditando) {
+        persona.estado = opcionesEstados.value.find((v) => {
+          return String(v.descripcion) === String(persona.estado);
+        });
+      }
       isReady.value = true;
     });
 
     return {
+      qDateProxy1,
+      onClickAnio,
       ImagenDataRef,
       ImagenRef,
       isReady,
       verMas,
       getURLImagen,
+      opcionesEstados,
 
       onResetClick,
       onGrabarClick,

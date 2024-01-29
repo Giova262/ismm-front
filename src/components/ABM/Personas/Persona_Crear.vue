@@ -58,8 +58,12 @@ export default defineComponent({
         const respondStore = await persona.value.storePersona();
         if (respondStore) {
           persona.value.id = await respondStore.data.data.id;
-          await persona.value.uploadImageFireBase();
-          await persona.value.storeImagen();
+
+          if (persona.value.foto_data) {
+            await persona.value.uploadImageFireBase();
+            await persona.value.storeImagen();
+          }
+
           notificarExito("Registrado exitosamente!");
           onResetClick();
         }

@@ -4,6 +4,9 @@ import {
 import { isEmpty, isCorrectFormatDB } from "src/Services/ValidacionesService";
 import PersonaAPIService from "src/components/ABM/Personas/Persona_ApiService";
 import { uploadFile } from "src/firebase/config";
+import { LocalStorage } from "quasar";
+import EstadosDB from 'src/db/EstadosDB';
+
 
 
 class Persona {
@@ -14,16 +17,19 @@ class Persona {
     this.sexo = null;
     this.fecha_nacimiento = null;
     this.fecha_ingreso = null;
-    this.telefono = null;
+    this.telefono = '+54911';
     this.email = null;
     this.comentario = null;
     this.testimonio = null;
-    this.bautizado = null;
+    this.bautizado = false;
     this.edad = null;
     this.foto_url = null;
     this.foto_data = null;
     this.iglesia = null;
     this.direccion = null;
+    this.estado = {
+      descripcion: "FIRME"
+    };
   }
 
 
@@ -34,16 +40,18 @@ class Persona {
     this.sexo = null;
     this.fecha_nacimiento = null;
     this.fecha_ingreso = null;
-    this.telefono = null;
+    this.telefono = '+54911';
     this.email = null;
     this.comentario = null;
     this.testimonio = null;
-    this.bautizado = null;
+    this.bautizado = false;
     this.edad = null;
     this.foto_url = null;
     this.foto_data = null;
     this.iglesia = null;
     this.direccion = null;
+    this.barrio = null;
+    this.estado = null;
   }
 
   fakeData() {
@@ -59,6 +67,10 @@ class Persona {
     this.testimonio = "masterpat45@gmail.com";
     this.bautizado = true;
     this.edad = 15;
+    this.barrio = 'norte';
+    this.estado = {
+      descripcion: "FIRME"
+    };
   }
 
   validated() {
@@ -74,18 +86,31 @@ class Persona {
       notificarError(`El Telefono es un dato requerido`);
       return false;
     }
-    if (isEmpty(this.sexo)) {
-      notificarError(`El Sexo es un dato requerido`);
+    if (isEmpty(this.estado)) {
+      notificarError(`El Estado es un dato requerido`);
       return false;
     }
+    // if (isEmpty(this.sexo)) {
+    //   notificarError(`El Sexo es un dato requerido`);
+    //   return false;
+    // }
     return true;
   }
 
   getPayload() {
     let ID_SEXO = null;
     if (this.sexo) {
-      ID_SEXO = String(this.sexo.codigo)
+      if (!this.sexo.codigo) ID_SEXO = this.sexo
+      else ID_SEXO = String(this.sexo.codigo)
     }
+
+    let ID_ESTADO = null;
+    if (this.estado) {
+      if (!this.estado.descripcion) ID_ESTADO = this.estado
+      else ID_ESTADO = String(this.estado.descripcion)
+    }
+
+    const telefonoFormateado = String(this.telefono).replace(/ /g,'');
 
     return {
       id: this.id,
@@ -94,7 +119,7 @@ class Persona {
       sexo: ID_SEXO,
       fecha_nacimiento: this.fecha_nacimiento,
       fecha_ingreso: this.fecha_ingreso,
-      telefono: this.telefono,
+      telefono: telefonoFormateado,
       email: this.email,
       comentario: this.comentario,
       testimonio: this.testimonio,
@@ -102,6 +127,9 @@ class Persona {
       edad: this.edad,
       iglesia: this.iglesia,
       direccion: this.direccion,
+      barrio: this.barrio,
+      foto_url: this.foto_url,
+      estado: ID_ESTADO,
     };
   }
 
@@ -112,7 +140,17 @@ class Persona {
     };
   }
 
+  saveLocalStorage() {
+    LocalStorage.set("itemActual", JSON.stringify(this.getPayload()));
+  }
+
+  async loadLocalStorage() {
+    const datos = JSON.parse(LocalStorage.getItem('itemActual'))
+    await this.cargarDatos(datos);
+  }
+
   async storePersona() {
+    await PersonaAPIService.setAuthEncabezado()
     return await PersonaAPIService.store(this.getPayload());
   }
 
@@ -122,22 +160,19 @@ class Persona {
 
   async storeImagen() {
     const request = this.getPayloadImage()
+    await PersonaAPIService.setAuthEncabezado()
     return await PersonaAPIService.storeImage(request);
   }
 
-  async editar() {
-    if (!this.id) {
-      this.store();
-      return null;
-    }
+  async update() {
+    await PersonaAPIService.setAuthEncabezado()
     return await PersonaAPIService.update(this.getPayload(), this.id);
   }
 
-  cargarDatos(data) {
+  async cargarDatos(data) {
     this.id = data.id;
     this.nombre = data.nombre;
     this.apellido = data.apellido;
-    this.sexo = data.sexo;
     this.fecha_nacimiento = data.fecha_nacimiento;
     this.fecha_ingreso = data.fecha_ingreso;
     this.telefono = data.telefono;
@@ -149,6 +184,16 @@ class Persona {
     this.iglesia = data.iglesia;
     this.foto_url = data.foto_url;
     this.direccion = data.direccion;
+    this.barrio = data.barrio;
+    this.estado = data.estado;
+
+    if (data.sexo === 'M') {
+      this.sexo = { descripcion: 'Hombre', codigo: 'M' };
+    }
+    if (data.sexo === 'F') {
+      this.sexo = { descripcion: 'Mujer', codigo: 'F' };
+    }
+
   }
 }
 

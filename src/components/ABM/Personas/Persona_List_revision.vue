@@ -17,14 +17,6 @@
       </div>
       <div>
         <q-icon
-          name="download"
-          @click="onDownloadClick"
-          class="cursor-pointer q-py-sm q-mr-sm text-green-9"
-          size="sm"
-        >
-          <q-tooltip>Exportar</q-tooltip>
-        </q-icon>
-        <q-icon
           name="refresh"
           @click="onRefreshList"
           class="cursor-pointer q-py-sm"
@@ -105,29 +97,17 @@
                   <q-item-label
                     class="text-grey-5 row items-center no-wrap q-mt-xs"
                   >
-                    <div v-if="item.estado === 'FIRME'">
-                      <span class="text-grey-7 q-pr-xs">Estado:</span>
-                      <span class="col text-green-5 text-bold">
+                    <div>
+                      <span class="text-grey-7 q-pr-sm">Estado:</span>
+                      <span class="col text-yellow-9 text-bold">
                         {{ item.estado }}
                       </span>
                     </div>
-                    <div
-                      v-else-if="
-                        item.estado === 'ABANDONO'
-                      "
+                    <span
+                      v-if="item.iglesia"
+                      class="col text-right text-purple-5 text-bold"
+                      >{{ item.iglesia }}</span
                     >
-                      <span class="text-grey-7 q-pr-xs">Estado:</span>
-                      <span class="col text-red-5 text-bold">
-                        {{ item.estado }}
-                      </span>
-                    </div>
-                    <div v-else>
-                      <span class="text-grey-7 q-pr-xs">Estado:</span>
-                      <span class="col text-grey-8 text-bold">
-                        {{ item.estado }}
-                      </span>
-                    </div>
-                    <span v-if="item.iglesia" class="col text-right text-purple-5 text-bold">{{ item.iglesia }}</span>
                   </q-item-label>
 
                   <q-item-label
@@ -163,7 +143,9 @@
                     class="row justify-between items-center text-grey-6"
                   >
                     <span>Telfono: {{ item.telefono }}</span>
-                    <span v-if="item.fecha_ingreso">Fecha de ingreso: {{ item.fecha_ingreso }}</span>
+                    <span v-if="item.fecha_ingreso"
+                      >Fecha de ingreso: {{ item.fecha_ingreso }}</span
+                    >
                   </q-item-label>
 
                   <q-item-label
@@ -194,9 +176,7 @@ import { useRouter } from "vue-router";
 import PersonaInputs from "src/components/ABM/Personas/Persona_Inputs.vue";
 import PersonaAPIService from "src/components/ABM/Personas/Persona_ApiService";
 import Persona from "src/Models/Persona";
-import { notificarError } from "src/Services/NotificacionesService";
 import PersonasDB from "src/db/PersonasDB";
-import { saveExcel } from "@progress/kendo-vue-excel-export";
 
 export default defineComponent({
   name: "Persona_List",
@@ -312,7 +292,7 @@ export default defineComponent({
     }
 
     async function cargarPersonasDesdeDexie() {
-      const respondGetAllFiltrado = await PersonasDB.getAllFiltrado(
+      const respondGetAllFiltrado = await PersonasDB.getAllWhereEstado(
         "EN REVISION"
       );
 
@@ -330,32 +310,6 @@ export default defineComponent({
       await cargarPersonasDesdeAPI();
     }
 
-    async function onDownloadClick() {
-      const filas = await PersonasDB.getAll();
-      if (filas.length === 0) {
-        notificarError("No hay datos para exportar");
-        return;
-      }
-
-      let columnas = [];
-      for (var key in filas[0]) {
-        columnas.push({
-          field: key,
-          filter: "text",
-          filterable: true,
-          orden: "1",
-          title: key,
-          width: "200",
-        });
-      }
-
-      saveExcel({
-        fileName: `SantuarioMundialDeLosMilagros Registro de personas - ${new Date()}`,
-        data: filas,
-        columns: columnas,
-      });
-    }
-
     onMounted(async () => {
       await cargarPersonasDesdeDexie();
       isReady.value = true;
@@ -370,7 +324,6 @@ export default defineComponent({
       onRight,
       onItemClick,
       onRefreshList,
-      onDownloadClick,
       isReady,
       personasList,
       personasFilteredOut,

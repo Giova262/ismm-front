@@ -82,9 +82,6 @@ export function notificarAPIError(error) {
       )
       break
     case 422:
-      console.log(' es 422');
-      console.log(error);
-      console.log(error.response);
       if (error.response.data.message) {
         notificarError(error.response.data.message);
       }

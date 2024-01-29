@@ -170,8 +170,8 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: `Quasar App`,
-        short_name: `Quasar App`,
+        name: `Santuario Mundial de los Milagros`,
+        short_name: `Santuario Mundial de los Milagros`,
         description: `A Quasar Project`,
         display: "standalone",
         orientation: "portrait",

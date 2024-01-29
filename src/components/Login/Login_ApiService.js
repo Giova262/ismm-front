@@ -1,4 +1,4 @@
-import { Loading, Notify, SessionStorage, LocalStorage } from 'quasar'
+import { Loading, LocalStorage } from 'quasar'
 import {
   notificarError,
   notificarExito,
@@ -71,6 +71,20 @@ class ApiServiceClass {
     try {
       Loading.show({ message: 'Cargando mienbros..', messageColor: 'info' })
       response = await Axios.get(`persona`)
+    } catch (error) {
+      console.error(error.message)
+      notificarAPIError(error)
+    } finally {
+      Loading.hide()
+    }
+    return response
+  }
+
+  async getNovedades() {
+    let response = null
+    try {
+      Loading.show({ message: 'Cargando novedades..', messageColor: 'info' })
+      response = await Axios.get(`novedades`)
     } catch (error) {
       console.error(error.message)
       notificarAPIError(error)

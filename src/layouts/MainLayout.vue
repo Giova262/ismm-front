@@ -1,15 +1,14 @@
-
 <style>
-/* .q-header {
-  height: 30px !important;
-} */
+.q-header {
+  height: 30px;
+}
 </style>
 
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
-      <q-toolbar class="row bg-green-10">
-        <div class="col-2 text-white">
+      <div class="row bg-indigo-10 q-pt-xs">
+        <div class="col text-white flex flex-center">
           <q-btn
             flat
             dense
@@ -20,83 +19,72 @@
           />
         </div>
 
-        <div class="col">
-          <div class="jg-text-14 text-grey-4 text-uppercase">
+        <div class="col-9 flex flex-center">
+          <div class="jg-text-14 text-bold text-grey-4 text-uppercase">
             Santuario Mundial de los Milagros
           </div>
         </div>
 
-        <div class="col-1 jg-text-13 text-grey-4 text-right text-italic">
+        <div class="col jg-text-13 text-grey-5 text-right flex flex-center">
           {{ version }}
         </div>
-      </q-toolbar>
+      </div>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" show-if-above class="bg-grey-9 text-grey-2">
+    <q-drawer
+      v-model="leftDrawerOpen"
+      show-if-above
+      class="bg-indigo-10 text-grey-3"
+      :width="240"
+    >
       <q-list>
-        <q-item-label header class="text-grey-2 q-ml-sm"> MENU </q-item-label>
+        <q-item-label header class="text-bold text-grey-2 q-pb-sm q-pt-md">
+          MENU
+        </q-item-label>
 
-        <q-separator class="q-mx-xs bg-grey-6 q-mb-md"></q-separator>
-
+        <q-separator class="bg-grey-5 q-mx-md q-mb-md" />
 
         <q-item clickable tag="a" :to="'/persona/crear'">
           <q-item-section avatar>
-            <q-icon :name="'person_add'" :style="{ color: '#a5d6a7' }" />
+            <q-icon :name="'person_add'" color="green-3" />
           </q-item-section>
 
           <q-item-section>
             <q-item-label>Agregar</q-item-label>
-            <!-- <q-item-label caption>Registra una persona</q-item-label> -->
+            <q-item-label class="text-grey-5" caption
+              >Registra una persona</q-item-label
+            >
           </q-item-section>
         </q-item>
-
-        <q-separator class="bg-grey-7 q-mx-xl " />
-
+        <q-separator class="bg-blue-9 q-my-xs q-mx-xl" />
 
         <q-item clickable tag="a" :to="'/personas/show'">
           <q-item-section avatar>
-            <q-icon :name="'search'" :style="{ color: '#eeeee' }" />
+            <q-icon :name="'search'" color="grey-3" />
           </q-item-section>
 
           <q-item-section>
-            <q-item-label>Ver Miembros</q-item-label>
-            <!-- <q-item-label caption>Muestra todos los ingresados</q-item-label> -->
+            <q-item-label class="">Ver Miembros</q-item-label>
+            <q-item-label class="text-grey-5" caption
+              >Lista completa</q-item-label
+            >
           </q-item-section>
         </q-item>
-
-        <q-separator class="bg-grey-7 q-mx-xl " />
-
+        <q-separator class="bg-blue-9 q-mx-xl q-my-xs" />
 
         <q-item clickable tag="a" :to="'/personas/show/revision'">
           <q-item-section avatar>
-            <q-icon :name="'person_search'" :style="{ color: '#ce93d8' }" />
+            <q-icon :name="'person_search'" color="purple-3" />
           </q-item-section>
 
           <q-item-section>
-            <q-item-label>Ver en Revision</q-item-label>
-            <!-- <q-item-label caption>Muestra todos los ingresados</q-item-label> -->
+            <q-item-label class="">Ver en Revision</q-item-label>
+            <q-item-label class="text-grey-5" caption
+              >Pendientes a contactarse</q-item-label
+            >
           </q-item-section>
         </q-item>
-
-        <q-separator class="bg-grey-7 q-mx-xl " />
-
-        <q-item
-          clickable
-          tag="a"
-          target="_blank"
-          :href="'https://www.facebook.com/profile.php?id=100069881769785'"
-        >
-          <q-item-section avatar>
-            <q-icon :name="'public'" :style="{ color: '#90caf9' }" />
-          </q-item-section>
-
-          <q-item-section>
-            <q-item-label>Facebook</q-item-label>
-            <!-- <q-item-label caption>Santuario Mundial Fb</q-item-label> -->
-          </q-item-section>
-        </q-item>
-
-        <q-separator class="bg-grey-7 q-mx-xl " />
+        <q-separator class="bg-blue-9 q-mx-xl q-my-xs" />
 
         <q-item
           clickable
@@ -105,29 +93,55 @@
           :href="'https://online.bibliadeestudio.org'"
         >
           <q-item-section avatar>
-            <q-icon :name="'favorite'" :style="{ color: '#ef9a9a' }" />
+            <q-icon :name="'favorite'" color="red-3" />
           </q-item-section>
 
           <q-item-section>
             <q-item-label>Ver Biblia</q-item-label>
-            <!-- <q-item-label caption>Biblia Online</q-item-label> -->
+            <q-item-label class="text-grey-5" caption
+              >Biblia Online</q-item-label
+            >
           </q-item-section>
         </q-item>
 
-        <q-separator class="bg-grey-7 q-mx-md q-my-md" />
+        <q-separator class="bg-blue-9 q-mx-xl q-my-xs" />
 
-        <q-item clickable flat @click.native="desloguear" class="">
+        <q-item
+          clickable
+          tag="a"
+          target="_blank"
+          :href="'https://www.facebook.com/profile.php?id=100069881769785'"
+        >
           <q-item-section avatar>
-            <q-icon size="md" name="exit_to_app" color="red-4" />
+            <q-icon :name="'public'" color="blue-3" />
           </q-item-section>
-          <q-item-section>SALIR</q-item-section>
+
+          <q-item-section>
+            <q-item-label>Facebook</q-item-label>
+            <q-item-label class="text-grey-5" caption
+              >Redes Sosciales</q-item-label
+            >
+          </q-item-section>
         </q-item>
 
+        <q-separator class="bg-grey-5 q-mx-md q-mt-md" />
 
+        <q-item clickable flat @click.native="desloguear" class="q-mt-sm">
+          <q-item-section avatar>
+            <q-icon name="exit_to_app" color="red-5" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>SALIR</q-item-label>
+            <q-item-label class="text-grey-5" caption
+              >Cerrar Sesion</q-item-label
+            >
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
-    <q-page-container>
+    <q-page-container class="q-mt-sm">
       <router-view />
     </q-page-container>
   </q-layout>
@@ -138,8 +152,6 @@ import { defineComponent, ref } from "vue";
 import { VERSION } from "src/config/app.config.js";
 import { LocalStorage, useQuasar } from "quasar";
 import { useRouter } from "vue-router";
-
-
 
 export default defineComponent({
   name: "MainLayout",
@@ -152,7 +164,6 @@ export default defineComponent({
     const leftDrawerOpen = ref(false);
     const version = ref(VERSION);
     const router = useRouter();
-
 
     function desloguear() {
       LocalStorage.remove("usuario");
@@ -170,5 +181,3 @@ export default defineComponent({
   },
 });
 </script>
-
-

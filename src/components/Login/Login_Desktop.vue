@@ -135,6 +135,7 @@ import {
   notificarExito,
 } from "src/Services/NotificacionesService";
 import { isEmpty } from "src/Services/ValidacionesService";
+import storageService from "src/Services/StorageService";
 
 export default defineComponent({
   name: "Login_Desktop",
@@ -168,12 +169,16 @@ export default defineComponent({
       if (datos) {
         localStorage.setItem("usuario", JSON.stringify(datos.data));
         APIService.setAuthEncabezado(datos.data.accessToken);
-        notificarExito("Conectado");
+
+        await storageService.migrar();
+
         router
           .push({
-            name: "inicio",
+            name: "show",
           })
-          .catch(() => {});
+          .catch(() => {
+            notificarExito("Conectado");
+          });
       }
     }
 

@@ -1,4 +1,4 @@
-# Quasar App (quasar-project)
+# Santuario Mundial de los Milagros (quasar-project)
 
 A Quasar Project
 

@@ -1,6 +1,5 @@
 <template>
   <q-layout view="lHh Lpr lFf" class="bg-white">
-
     <!-- Para pantallas chicas -->
     <div class="lt-sm contenedor">
       <LoginFormMobile />

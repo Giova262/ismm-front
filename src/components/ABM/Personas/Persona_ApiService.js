@@ -15,7 +15,7 @@ class ApiServiceClass {
     const usuario = JSON.parse(LocalStorage.getItem('usuario'))
     let response = true
     try {
-      Axios.defaults.headers.common.authorization = `Bearer ${usuario.access_token}`
+      Axios.defaults.headers.common.authorization = `Bearer ${usuario.accessToken}`
     } catch (error) {
       console.error(error.message)
       notificarError(error.message)
@@ -80,16 +80,11 @@ class ApiServiceClass {
     return response
   }
 
-
-  // --------
-
-
   async update(request, id) {
     let response = null
     try {
       Loading.show({ message: 'Enviando...', messageColor: 'info' })
-      response = await Axios.put(`evento/${id}`, request)
-      // notificarExito(response.data.mensaje, response.statusText)
+      response = await Axios.put(`persona/${id}`, request)
     } catch (error) {
       console.error(error.message)
       notificarAPIError(error)
@@ -98,6 +93,9 @@ class ApiServiceClass {
     }
     return response
   }
+
+
+  // --------
 
   async destroy(id) {
     let response = null

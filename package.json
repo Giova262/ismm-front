@@ -1,8 +1,8 @@
 {
   "name": "quasar-project",
   "version": "0.0.1",
-  "description": "A Quasar Project",
-  "productName": "Quasar App",
+  "description": "Registro de personas",
+  "productName": "Santuario Mundial de los Milagros",
   "author": "Giova <masterpat45@gmail.com>",
   "private": true,
   "scripts": {
@@ -15,6 +15,7 @@
     "axios": "^1.2.1",
     "core-js": "^3.6.5",
     "dotenv": "^16.0.0",
+    "dexie": "^3.0.3",
     "firebase": "^9.19.1",
     "fuse.js": "^6.4.6",
     "pinia": "^2.0.11",
@@ -22,7 +23,8 @@
     "uuid": "^9.0.0",
     "vue": "^3.0.0",
     "vue-i18n": "^9.0.0",
-    "vue-router": "^4.0.0"
+    "vue-router": "^4.0.0",
+    "@progress/kendo-vue-excel-export": "^1.1.4"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.13.14",

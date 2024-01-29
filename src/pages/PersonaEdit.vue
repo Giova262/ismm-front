@@ -1,9 +1,9 @@
 <template>
   <q-page class="flex flex-center fit">
     <div class="row fit">
-      <div class="col-12 text-center q-py-sm text-grey-8 text-uppercase">Registrar Miembro</div>
+      <div class="col-12 text-center q-py-sm text-grey-8 text-uppercase">Modificar Persona</div>
       <div class="fit">
-        <CrearPersona />
+        <PersonaModificar />
       </div>
     </div>
   </q-page>
@@ -11,12 +11,12 @@
 
 <script>
 import { defineComponent } from "vue";
-import CrearPersona from "src/components/ABM/Personas/Persona_Crear";
+import PersonaModificar from "src/components/ABM/Personas/Persona_Modificar";
 
 export default defineComponent({
-  name: "PersonaStore",
+  name: "PersonaEdit",
   components: {
-    CrearPersona,
+    PersonaModificar,
   },
 });
 </script>

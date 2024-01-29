@@ -77,8 +77,6 @@ class Evento {
 
   async editar() {
     if (!this.id) return null
-    console.log('this.getPayload()');
-    console.log(this.getPayload());
     return await EventoApiService.update(this.getPayload(), this.id)
   }
 
